@@ -1,0 +1,294 @@
+@import "tailwindcss";
+
+/*
+  Gigroom colour system: white 60%, purple 30%, lavender 10%.
+
+  - White is the canvas: page background, cards, forms, the message thread.
+  - Purple is the structure: the top bar, the dashboard sidebar, the home hero
+    band, headings, primary buttons, links, your own message bubbles, focus rings.
+  - Lavender is the accent: skill tags, selected filters, the other person's
+    message bubbles, unread rows, "Shortlisted" badges, hover states. It is always
+    a BACKGROUND behind purple or ink text, never used as text on white.
+  - Ink (near-black with a purple cast) is body text: long paragraphs in pure
+    purple are tiring to read.
+
+  Contrast (WCAG AA needs 4.5:1 for text):
+    purple #4B1F7A on white            11.8:1   white on purple  11.8:1
+    ink #1E1726 on white               17.4:1   ink-muted on white  7.4:1
+    purple on lavender #E9E1F8          9.3:1   on-lavender on lavender 12.5:1
+    dark: light purple on purple-black  9.5:1   ink on purple-black 17.1:1
+  Dark mode keeps the same roles: the bar stays a deep purple, the canvas becomes
+  a purple-black, and buttons use a light purple with dark text.
+*/
+
+:root {
+  --canvas: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #faf8fd;
+  --ink: #1e1726;
+  --ink-muted: #5b5266;
+  --brand: #4b1f7a;
+  --brand-hover: #3a165f;
+  --on-brand: #ffffff;
+  --bar: #4b1f7a;
+  --on-bar: #ffffff;
+  --bar-muted: #d9cbf2;
+  --lavender: #e9e1f8;
+  --lavender-hover: #ddd1f3;
+  --on-lavender: #2e1450;
+  --line: #e4dcf1;
+  --line-strong: #c9bbe2;
+  --ok: #1d6b44;
+  --ok-bg: #e2f3ea;
+  --warn: #7a4b00;
+  --warn-bg: #fdf1dc;
+  --danger: #a3243b;
+  --danger-bg: #fbe7eb;
+  --shadow: 0 1px 2px rgb(46 20 80 / 0.06), 0 4px 16px rgb(46 20 80 / 0.06);
+  color-scheme: light;
+}
+
+/* Dark values, applied by the toggle (data-theme) or by the system setting. */
+:root[data-theme="dark"] {
+  --canvas: #120b1a;
+  --surface: #1b1226;
+  --surface-2: #221731;
+  --ink: #f4effb;
+  --ink-muted: #b9aecb;
+  --brand: #c4a9f5;
+  --brand-hover: #d6c3f8;
+  --on-brand: #1a0f28;
+  --bar: #2b1747;
+  --on-bar: #ffffff;
+  --bar-muted: #c9b8e6;
+  --lavender: #33254b;
+  --lavender-hover: #3d2d58;
+  --on-lavender: #ede5fb;
+  --line: #31243f;
+  --line-strong: #4a3963;
+  --ok: #7fd8a8;
+  --ok-bg: #133325;
+  --warn: #f4c46b;
+  --warn-bg: #3a2a0d;
+  --danger: #f59aab;
+  --danger-bg: #3d1520;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --canvas: #120b1a;
+    --surface: #1b1226;
+    --surface-2: #221731;
+    --ink: #f4effb;
+    --ink-muted: #b9aecb;
+    --brand: #c4a9f5;
+    --brand-hover: #d6c3f8;
+    --on-brand: #1a0f28;
+    --bar: #2b1747;
+    --on-bar: #ffffff;
+    --bar-muted: #c9b8e6;
+    --lavender: #33254b;
+    --lavender-hover: #3d2d58;
+    --on-lavender: #ede5fb;
+    --line: #31243f;
+    --line-strong: #4a3963;
+    --ok: #7fd8a8;
+    --ok-bg: #133325;
+    --warn: #f4c46b;
+    --warn-bg: #3a2a0d;
+    --danger: #f59aab;
+    --danger-bg: #3d1520;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+    color-scheme: dark;
+  }
+}
+
+/* Design tokens as Tailwind utilities: bg-canvas, text-ink, bg-brand, bg-lavender... */
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-on-brand: var(--on-brand);
+  --color-bar: var(--bar);
+  --color-on-bar: var(--on-bar);
+  --color-bar-muted: var(--bar-muted);
+  --color-lavender: var(--lavender);
+  --color-lavender-hover: var(--lavender-hover);
+  --color-on-lavender: var(--on-lavender);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ok: var(--ok);
+  --color-ok-bg: var(--ok-bg);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-jakarta), system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    color: var(--brand);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    font-variation-settings: "SOFT" 50;
+  }
+  /* One focus style everywhere: a thick purple ring with a white gap. */
+  :focus-visible {
+    outline: 3px solid var(--brand);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  .on-bar :focus-visible {
+    outline-color: var(--on-bar);
+  }
+  ::selection {
+    background: var(--lavender);
+    color: var(--on-lavender);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-page { padding-inline: 1.5rem; }
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem; /* 44px touch target */
+    padding: 0.5rem 1.1rem;
+    border-radius: 999px;
+    font-weight: 650;
+    font-size: 0.95rem;
+    line-height: 1.2;
+    text-decoration: none;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .btn:disabled, .btn[aria-disabled="true"] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .btn-primary { background: var(--brand); color: var(--on-brand); }
+  .btn-primary:hover:not(:disabled) { background: var(--brand-hover); }
+  .btn-secondary { background: var(--surface); color: var(--brand); border-color: var(--brand); }
+  .btn-secondary:hover:not(:disabled) { background: var(--lavender); }
+  .btn-soft { background: var(--lavender); color: var(--on-lavender); }
+  .btn-soft:hover:not(:disabled) { background: var(--lavender-hover); }
+  .btn-ghost { background: transparent; color: var(--brand); }
+  .btn-ghost:hover:not(:disabled) { background: var(--lavender); }
+  .btn-danger { background: var(--surface); color: var(--danger); border-color: var(--danger); }
+  .btn-danger:hover:not(:disabled) { background: var(--danger-bg); }
+  .btn-sm { min-height: 2.25rem; padding: 0.3rem 0.85rem; font-size: 0.875rem; }
+  .btn-on-bar { background: var(--on-bar); color: var(--bar); }
+  .btn-on-bar:hover { background: var(--lavender); color: var(--on-lavender); }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.65rem;
+    border-radius: 999px;
+    background: var(--lavender);
+    color: var(--on-lavender);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.6;
+    text-decoration: none;
+  }
+  a.chip:hover { background: var(--lavender-hover); }
+
+  .label {
+    display: block;
+    font-weight: 650;
+    font-size: 0.9375rem;
+    margin-bottom: 0.3rem;
+    color: var(--ink);
+  }
+  .hint { font-size: 0.8125rem; color: var(--ink-muted); margin-top: 0.25rem; }
+  .field-error {
+    display: flex;
+    gap: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--danger);
+    margin-top: 0.3rem;
+  }
+  .input {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.55rem 0.85rem;
+    border-radius: 0.75rem;
+    border: 1.5px solid var(--line-strong);
+    background: var(--surface);
+    color: var(--ink);
+    font: inherit;
+  }
+  .input:hover { border-color: var(--brand); }
+  .input[aria-invalid="true"] { border-color: var(--danger); }
+  .input::placeholder { color: var(--ink-muted); opacity: 0.8; }
+  textarea.input { min-height: 8rem; resize: vertical; }
+  select.input { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--brand) 50%), linear-gradient(135deg, var(--brand) 50%, transparent 50%); background-position: calc(100% - 18px) 55%, calc(100% - 13px) 55%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 2.25rem; }
+
+  .link { color: var(--brand); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1.5px; }
+  .link:hover { text-decoration-thickness: 3px; }
+
+  .skeleton {
+    background: linear-gradient(90deg, var(--surface-2), var(--lavender), var(--surface-2));
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+    border-radius: 0.75rem;
+  }
+
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  .sr-only-focusable:not(:focus) {
+    position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  }
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
